@@ -18,7 +18,7 @@ class ShoppingCartAcceptanceSpec extends FeatureSpec with GivenWhenThen with Mat
       val updatedCart = shoppingCart.add(doveSoap, 5)
 
       Then("The shopping cart should contain 5 Dove Soaps each with a unit price of 39.99")
-      updatedCart.lineItems should contain(LineItem(doveSoap, 5))
+      updatedCart.lineItems should contain(doveSoap -> 5)
 
       And("the shopping cart’s total price should equal 199.95")
       updatedCart.total shouldBe 199.95
@@ -39,7 +39,7 @@ class ShoppingCartAcceptanceSpec extends FeatureSpec with GivenWhenThen with Mat
       updatedCart = updatedCart.add(doveSoap, 3)
 
       Then("The shopping cart should contain 8 Dove Soaps each with a unit price of 39.99")
-      updatedCart.lineItems should contain(LineItem(doveSoap, 8))
+      updatedCart.lineItems should contain(doveSoap -> 8)
 
       And("the shopping cart’s total price should equal 319.92")
       updatedCart.total shouldBe 319.92
@@ -47,17 +47,14 @@ class ShoppingCartAcceptanceSpec extends FeatureSpec with GivenWhenThen with Mat
 
     scenario("Step 3: Calculate the tax rate of the shopping cart with multiple items") {
 
-      Given("An empty shopping cart")
-      val shoppingCart = ShoppingCart()
+      Given("An empty shopping cart with a sales tax rate of 12.5%")
+      val shoppingCart = ShoppingCart(salesTaxRate = 12.5)
 
       And("a product, Dove Soap with a unit price of 39.99")
       val doveSoap = Product("Dove Soap", 39.99)
 
       And("a product, Axe Deo with a unit price of 99.99")
       val axeDeo = Product("Axe Deo", 99.99)
-
-      And("a sales tax rate of 12.5%")
-      val salesTax = 12.5
 
       When("The user adds 2 Dove Soaps to the shopping cart")
       var updatedCart = shoppingCart.add(doveSoap, 2)
@@ -66,10 +63,10 @@ class ShoppingCartAcceptanceSpec extends FeatureSpec with GivenWhenThen with Mat
       updatedCart = updatedCart.add(axeDeo, 2)
 
       Then("The shopping cart should contain 2 Dove Soaps each with a unit price of 39.99")
-      updatedCart.lineItems should contain(LineItem(doveSoap, 2))
+      updatedCart.lineItems should contain(doveSoap -> 2)
 
       And("The shopping cart should contain 2 Axe Deos each with a unit price of 99.99")
-      updatedCart.lineItems should contain(LineItem(axeDeo, 2))
+      updatedCart.lineItems should contain(axeDeo -> 2)
 
       And("the total sales tax amount for the shopping cart should equal 35.00")
       updatedCart.salesTax shouldBe 35.00
