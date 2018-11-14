@@ -27,5 +27,7 @@ case class ShoppingCart(lineItems: List[LineItem] = List.empty) {
 
   def total: Double = round(lineItems.map(item => item.product.cost * item.quantity).sum)
 
-  def round(double: Double): Double = BigDecimal(double).setScale(2, RoundingMode.HALF_UP).doubleValue()
+  def salesTax: Double = ???
+
+  private def round(double: Double) = BigDecimal(double).setScale(2, RoundingMode.HALF_UP).doubleValue()
 }
