@@ -9,11 +9,20 @@ case class LineItem(product: Product, quantity: Int)
 case class ShoppingCart(lineItems: List[LineItem] = List.empty) {
 
   def add(product: Product, quantity: Int): ShoppingCart = {
-    if(quantity > 0) {
-      ShoppingCart(List(LineItem(product, quantity)))
+    val updatedLineItems = if(quantity > 0) {
+      updateLineItems(product, quantity)
     } else {
-      ShoppingCart()
+      lineItems
     }
+
+    ShoppingCart(updatedLineItems)
+  }
+
+  private def updateLineItems(product: Product, quantity: Int) = {
+    val totalQuantity = lineItems.find(_.product == product)
+      .fold(quantity)(_.quantity + quantity)
+
+    List(LineItem(product, totalQuantity))
   }
 
   def total: Double = round(lineItems.map(item => item.product.cost * item.quantity).sum)

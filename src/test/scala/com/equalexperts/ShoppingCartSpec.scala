@@ -62,6 +62,24 @@ class ShoppingCartSpec extends WordSpec with Matchers {
       ShoppingCart().total shouldBe 0.00
     }
 
+    "update item quantities as they are added" in {
+      val testProduct = Product("Test", 1.00)
+
+      var updatedCart = ShoppingCart().add(testProduct, 1)
+      updatedCart = updatedCart.add(testProduct, 1)
+
+      updatedCart shouldBe ShoppingCart(List(LineItem(testProduct, 2)))
+    }
+
+    "not update item quantities if 0 quantity is added" in {
+      val testProduct = Product("Test", 1.00)
+
+      var updatedCart = ShoppingCart().add(testProduct, 1)
+      updatedCart = updatedCart.add(testProduct, 0)
+
+      updatedCart shouldBe ShoppingCart(List(LineItem(testProduct, 1)))
+    }
+
   }
   
 }
